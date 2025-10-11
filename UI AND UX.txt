@@ -1,0 +1,209 @@
+1️⃣ Layout & Composition
+🔹 Grid & Spacing Discipline
+
+Use a consistent 8-point grid everywhere.
+
+Vertical rhythm: 16/24/32px steps only — no random spacing.
+
+Cards, sections, and headlines align perfectly on the same vertical axis.
+
+🔹 Responsive Balance
+
+Don’t just “shrink” things for mobile — restructure:
+
+2-column → single stacked feed.
+
+Charts collapse into tabs or sliders.
+
+Sidebars turn into drawers.
+
+Every breakpoint (sm / md / lg / xl) should be designed intentionally, not auto-shrunk.
+
+2️⃣ Visual Hierarchy & Readability
+🔹 Focus on Scannability
+
+Headlines = 1-2 lines max, strong weight.
+
+Body text = comfortable leading (1.6–1.8em), medium contrast (not pure white).
+
+Use typographic contrast, not color, for hierarchy.
+
+🔹 Visual Anchors
+
+Each page should have one dominant visual anchor —
+
+News → Digest card (animated gradient).
+
+Comparisons → Central chart animation.
+
+Learn → Track cards with progress rings.
+
+🔹 Avoid visual noise
+
+Never mix more than 2 accent colors per view.
+
+Use shadows sparingly — depth should come from motion and lighting, not darkness.
+
+3️⃣ Animations & Motion Design
+🔹 Motion hierarchy
+
+Primary motion: Page transitions (crossfade + slight upward drift, duration 0.35s).
+
+Secondary motion: Cards enter with stagger delay (0.06s each).
+
+Tertiary motion: Hover responses (scale 1.02, glow fade).
+
+🔹 Feedback everywhere
+
+Buttons: ripple/glow or subtle press depth.
+
+Search/filter: instant micro feedback (loading shimmer, skeleton placeholders).
+
+Tab switches: crossfade content, no hard reloads.
+
+🔹 Ease curves
+
+Use natural easing: cubic-bezier(0.16, 1, 0.3, 1) (same as Framer Motion’s “spring” feel).
+
+4️⃣ Interactivity Principles
+🔹 Zero dead ends
+
+If a user reaches “no results” → show fallback suggestions, not emptiness.
+
+Every article, model, or course should have “related items.”
+
+🔹 Optimistic interactions
+
+Show instant UI feedback → data can load after.
+
+Example: clicking a filter instantly animates the new cards while fetching real data.
+
+🔹 Keyboard shortcuts
+
+/ → focus search.
+
+⌘ + K → open global command palette (search all tabs).
+
+↑/↓ → navigate news feed or comparison models.
+
+5️⃣ Brand & Feel
+🔹 Subtle micro-interactions
+
+Cursor-tracking glow (light gradient that reacts to mouse).
+
+Button hover → inner border “shine.”
+
+Digest background → slow moving mesh (10s loop).
+
+🔹 Visual storytelling
+
+Use gradients as context, not just decoration.
+
+OpenAI news → cyan tone.
+
+Anthropic → violet amber.
+
+User subconsciously “learns” color = source.
+
+🔹 Ambient lighting
+
+Use Tailwind filters (drop-shadow, backdrop-blur-md) to create depth instead of heavy box-shadows.
+
+6️⃣ Consistency & Components
+🔹 Design System Discipline
+
+Components should all share:
+
+Padding scale (p-3, p-4, p-6 only).
+
+Corner radius: rounded-2xl.
+
+Shadow tiers: sm, md, lg (consistent naming).
+
+Animation duration tokens: 150ms, 300ms, 600ms.
+
+🔹 Global polish rules
+
+All icons = same stroke weight.
+
+All animations = same timing curve.
+
+All page headers = same spacing pattern.
+
+👉 Rule of thumb: If you remove color, it should still feel balanced.
+
+7️⃣ Performance + Perception
+🔹 Lazy but graceful
+
+Use skeleton loaders instead of spinners.
+
+Lazy load images with low-res blur previews.
+
+Prioritize text first → then images → then charts.
+
+🔹 perceived performance
+
+Even if API call takes 1s, give UI response in 50ms (loading shimmer, card fade).
+
+Cache digest & trending news → “instant reloads.”
+
+8️⃣ Accessibility & Usability
+🔹 Always readable
+
+Text contrast passes WCAG AA.
+
+Use prefers-reduced-motion to disable fancy animations.
+
+Keyboard navigation works (focus rings visible).
+
+🔹 Tooltips & alt texts
+
+Model names, charts, buttons → meaningful labels (Codex can auto-generate).
+
+9️⃣ Developer-Polish Features (What Pro Teams Do)
+
+Feature Flags: so you can hide unfinished features but deploy continuously.
+
+Error Boundaries: graceful fallback (“We couldn’t load this model’s chart — retry”).
+
+Analytics hooks: basic page + interaction tracking (helps refine UX).
+
+A/B ready layout: Codex should modularize components to swap easily later.
+
+🔟 "Delight" Layer (Optional but Powerful)
+
+These are the small things users talk about:
+
+News cards slightly tilt with 3D parallax on hover.
+
+Model comparison radar chart pulses once when updating.
+
+Learn progress ring animates from 0 → 100% with bounce.
+
+Scroll-based parallax on hero gradients.
+
+Haptic-like feedback on button press (subtle scale dip).
+
+⚡ Summary
+
+Non-negotiables for AI Helper:
+
+Strict layout grid & alignment.
+
+Cohesive animation language (stagger, ease, hierarchy).
+
+Instant feedback for all actions.
+
+Clear visual hierarchy (typography + spacing).
+
+Subtle gradients + lighting to define brand.
+
+Accessibility built-in.
+
+Perceived performance optimizations (skeletons, caching).
+
+Modular design system (consistent radii, timing, shadows).
+
+Zero dead ends, always suggest next step.
+
+Micro-delights (motion, light, feedback) that make it feel alive.

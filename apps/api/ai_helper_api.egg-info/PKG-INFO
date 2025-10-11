@@ -1,0 +1,117 @@
+Metadata-Version: 2.4
+Name: ai-helper-api
+Version: 0.1.0
+Summary: FastAPI backend for the AI Helper platform
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: fastapi<0.116.0,>=0.115.0
+Requires-Dist: uvicorn[standard]<1.0.0,>=0.30.1
+Requires-Dist: pydantic<3.0.0,>=2.7.0
+Requires-Dist: pydantic-settings<3.0.0,>=2.4.0
+Requires-Dist: sqlalchemy<3.0.0,>=2.0.30
+Requires-Dist: asyncpg<0.30.0,>=0.29.0
+Requires-Dist: aiosqlite<0.20.0,>=0.19.0
+Requires-Dist: alembic<2.0.0,>=1.13.0
+Requires-Dist: feedparser<7.0.0,>=6.0.10
+Requires-Dist: meilisearch<0.32.0,>=0.31.0
+Requires-Dist: prometheus-client<0.20.0,>=0.19.0
+Requires-Dist: passlib[bcrypt]<2.0.0,>=1.7.4
+Requires-Dist: python-multipart<1.0.0,>=0.0.9
+Requires-Dist: python-jose[cryptography]<4.0.0,>=3.3.0
+Provides-Extra: dev
+Requires-Dist: httpx<1.0.0,>=0.27.0; extra == "dev"
+Requires-Dist: pytest<9.0.0,>=8.0.0; extra == "dev"
+
+# AI Helper API
+
+FastAPI backend powering the AI Helper platform. The service will ingest news feeds, expose comparison data, serve curated learning content, and maintain the model directory.
+
+## Quick Start
+
+```bash
+# create and activate a virtual environment (example using uv)
+uv venv
+uv pip install -e .[dev]
+uvicorn app.main:app --reload
+```
+
+## Project Structure
+
+```
+app/
+  main.py          # FastAPI application factory
+  routers/
+    health.py      # basic healthcheck endpoint
+```
+
+Additional modules (ingestion workers, database models, batch jobs) will be added as the MVP evolves per the product specification in `Agents.md.docx`.
+
+
+## Database & Migrations
+
+The service uses Alembic for schema management. Migrations run automatically on app startup, but you can invoke them manually:
+
+```bash
+# upgrade to latest schema
+alembic -c apps/api/alembic.ini upgrade head
+
+# create a new revision after modifying SQLAlchemy models
+alembic -c apps/api/alembic.ini revision --autogenerate -m "describe change"
+```
+
+Seed data for news, comparisons, and learn tracks is applied after migrations during startup to keep API payloads consistent with the frontend contracts.
+
+## Tests
+
+Run the contract suite against a temporary sqlite+aiosqlite database:
+
+```bash
+cd apps/api
+python -m pytest
+```
+
+For a one-liner that applies migrations and executes tests, use:
+
+```bash
+cd apps/api
+./scripts/check.sh
+```
+
+Ingestion workers live under `app/workers` and will orchestrate RSS fetches, cleaning, and persistence once the pipeline is implemented.
+
+
+To mirror production locally with Postgres, use the provided Docker compose file:
+
+```bash
+cd apps/api
+docker compose up -d postgres
+AI_HELPER_DATABASE_URL=postgresql+asyncpg://ai_helper:ai_helper@localhost:5432/ai_helper ./scripts/test-postgres.sh
+```
+
+## Endpoints
+
+- `GET /health` - service health check.
+- `GET /news` - latest news digest.
+- `GET /comparisons/config` and `/comparisons/models` - benchmarking data.
+- `GET /learn/tracks` - curated learning tracks.
+- `GET /search` - full-platform search across news, comparisons, learn, and models.
+
+## Meilisearch
+
+To enable Meilisearch-backed search, supply `AI_HELPER_MEILISEARCH_URL` (and optionally `AI_HELPER_MEILISEARCH_API_KEY`). After running migrations and ingesting data, sync the indexes:
+
+```bash
+cd apps/api
+AI_HELPER_MEILISEARCH_URL=http://localhost:7700 AI_HELPER_MEILISEARCH_API_KEY=masterKey ./scripts/sync-search.sh
+```
+
+The `/search` endpoint automatically falls back to the built-in scorer when Meilisearch is unavailable.
+
+## Ingestion
+
+Set `AI_HELPER_INGESTION_ENABLED=false` to disable the background RSS worker. By default it runs every 30 minutes (configurable via `AI_HELPER_INGESTION_INTERVAL_MINUTES`). Use `./scripts/sync-search.sh` after ingestion to refresh Meilisearch indexes if needed.
+
+## Observability
+
+- Structured logging controlled by `AI_HELPER_LOG_LEVEL` (default INFO).
+- Prometheus metrics available at `/metrics` (set `AI_HELPER_METRICS_ENABLED=false` to disable).

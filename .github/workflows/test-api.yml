@@ -1,0 +1,32 @@
+name: test-api
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install backend dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ./apps/api
+
+      - name: Run pytest
+        working-directory: apps/api
+        env:
+          AI_HELPER_DATABASE_URL: sqlite+aiosqlite:///./ci.db
+          AI_HELPER_JWT_SECRET_KEY: ci-test-secret
+        run: pytest --maxfail=1 --disable-warnings -q

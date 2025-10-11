@@ -1,0 +1,3 @@
+﻿from pathlib import Path
+text = Path('apps/web/src/components/comparisons/comparison-experience.tsx').read_text()
+print(' | ' in text)

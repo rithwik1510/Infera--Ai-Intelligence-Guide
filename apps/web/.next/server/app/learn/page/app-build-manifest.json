@@ -1,0 +1,24 @@
+{
+  "pages": {
+    "/learn/page": [
+      "static/chunks/fed25_next_dist_6828e894._.js",
+      "static/chunks/AI HELPER_apps_web_src_app_favicon_ico_mjs_81e7aa3a._.js",
+      "static/chunks/[root-of-the-server]__d60dea3a._.css",
+      "static/chunks/AI HELPER_apps_web_src_cfebc540._.js",
+      "static/chunks/fed25_9b4b9945._.js",
+      "static/chunks/AI HELPER_apps_web_src_app_layout_tsx_e55cf43e._.js",
+      "static/chunks/fed25_next_dist_client_components_builtin_global-error_e2300221.js",
+      "static/chunks/AI HELPER_apps_web_src_components_learn_progress-ring_tsx_612743ad._.js",
+      "static/chunks/AI HELPER_apps_web_src_app_learn_page_tsx_e2300221._.js",
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_13cc77c3._.js",
+      "static/chunks/fed25_next_dist_compiled_react-dom_54ded20c._.js",
+      "static/chunks/fed25_next_dist_compiled_next-devtools_index_22da5dd1.js",
+      "static/chunks/fed25_next_dist_compiled_5a90c29e._.js",
+      "static/chunks/fed25_next_dist_client_e520b7f9._.js",
+      "static/chunks/fed25_next_dist_ecd278d0._.js",
+      "static/chunks/fed25_@swc_helpers_cjs_9a7f43a1._.js",
+      "static/chunks/AI HELPER_apps_web_a0ff3932._.js",
+      "static/chunks/turbopack-AI HELPER_apps_web_e2689165._.js"
+    ]
+  }
+}

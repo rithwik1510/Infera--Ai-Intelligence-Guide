@@ -1,0 +1,77 @@
+﻿"""News feed source definitions."""
+from __future__ import annotations
+
+NEWS_FEED_SOURCES: list[dict[str, str | float | tuple[str, str]]] = [
+    {
+        "id": "openai",
+        "name": "OpenAI",
+        "url": "https://openai.com/blog",
+        "feed_url": "https://openai.com/blog/rss",
+        "gradient": ("#5FD1E3", "#5CC4A2"),
+        "weight": 1.0,
+    },
+    {
+        "id": "anthropic",
+        "name": "Anthropic",
+        "url": "https://www.anthropic.com/news",
+        "feed_url": "https://www.anthropic.com/rss.xml",
+        "gradient": ("#8E9FF9", "#EDB55F"),
+        "weight": 0.95,
+    },
+    {
+        "id": "deepmind",
+        "name": "Google DeepMind",
+        "url": "https://deepmind.google/discover/blog",
+        "feed_url": "https://deepmind.google/discover/rss.xml",
+        "gradient": ("#36258D", "#5FD1E3"),
+        "weight": 0.9,
+    },
+    {
+        "id": "xai",
+        "name": "xAI",
+        "url": "https://x.ai/blog",
+        "feed_url": "https://x.ai/blog/rss.xml",
+        "gradient": ("#110B25", "#EDB55F"),
+        "weight": 0.85,
+    },
+    {
+        "id": "meta",
+        "name": "Meta AI",
+        "url": "https://ai.meta.com/blog",
+        "feed_url": "https://ai.meta.com/blog/rss/",
+        "gradient": ("#A47CFB", "#F0A7AE"),
+        "weight": 0.82,
+    },
+    {
+        "id": "mistral",
+        "name": "Mistral AI",
+        "url": "https://mistral.ai/news",
+        "feed_url": "https://mistral.ai/feed/",
+        "gradient": ("#EDB55F", "#5FD1E3"),
+        "weight": 0.8,
+    },
+    {
+        "id": "huggingface",
+        "name": "Hugging Face",
+        "url": "https://huggingface.co/blog",
+        "feed_url": "https://huggingface.co/blog/feed.xml",
+        "gradient": ("#5CC4A2", "#8E9FF9"),
+        "weight": 0.78,
+    },
+    {
+        "id": "microsoft",
+        "name": "Microsoft AI",
+        "url": "https://blogs.microsoft.com/ai/",
+        "feed_url": "https://blogs.microsoft.com/ai/feed/",
+        "gradient": ("#2A3A70", "#5FD1E3"),
+        "weight": 0.76,
+    },
+    {
+        "id": "stability",
+        "name": "Stability AI",
+        "url": "https://stability.ai/news",
+        "feed_url": "https://stability.ai/feed",
+        "gradient": ("#EDB55F", "#E667A8"),
+        "weight": 0.7,
+    },
+]

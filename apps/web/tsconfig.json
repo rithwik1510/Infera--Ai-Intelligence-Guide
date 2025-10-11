@@ -1,0 +1,30 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "incremental": true,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./src/*"],
+      "@ai-helper/types": ["../../packages/types/src"],
+      "@ai-helper/types/*": ["../../packages/types/src/*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": ["node_modules"],
+  "references": [
+    {
+      "path": "../../packages/types"
+    }
+  ]
+}
