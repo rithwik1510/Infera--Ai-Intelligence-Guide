@@ -21,19 +21,19 @@ const defaultFallback = (
 );
 
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  state: ErrorBoundaryState = { hasError: false };
+  override state: ErrorBoundaryState = { hasError: false };
 
   static getDerivedStateFromError(): ErrorBoundaryState {
     return { hasError: true };
   }
 
-  componentDidCatch(error: Error, info: ErrorInfo) {
+  override componentDidCatch(error: Error, info: ErrorInfo) {
     if (process.env.NODE_ENV !== "production") {
       console.error("[ErrorBoundary]", error, info.componentStack);
     }
   }
 
-  render() {
+  override render() {
     if (this.state.hasError) {
       return this.props.fallback ?? defaultFallback;
     }

@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 3, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"","debugId":null}},
-    {"offset": {"line": 55, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/posan/OneDrive/Desktop/AI%20HELPER/apps/web/src/app/api/news/live/route.ts"],"sourcesContent":["import { NextResponse } from \"next/server\";\n\nexport const dynamic = \"force-dynamic\";\nexport const runtime = \"nodejs\";\n\nexport async function GET() {\n  try {\n    const { buildLiveNewsPayload } = await import(\"@/lib/live-news\");\n    const payload = await buildLiveNewsPayload();\n    return NextResponse.json(payload, {\n      headers: {\n        \"Cache-Control\": \"no-store, max-age=0\",\n      },\n    });\n  } catch (error) {\n    console.error(\"[api/news/live] Failed to build live news payload\", error);\n    return NextResponse.json({ error: \"Unable to fetch live news.\" }, { status: 500 });\n  }\n}\n"],"names":[],"mappings":";;;;;;;;AAAA;;AAEO,MAAM,UAAU;AAChB,MAAM,UAAU;AAEhB,eAAe;IACpB,IAAI;QACF,MAAM,EAAE,oBAAoB,EAAE,GAAG;QACjC,MAAM,UAAU,MAAM;QACtB,OAAO,8JAAY,CAAC,IAAI,CAAC,SAAS;YAChC,SAAS;gBACP,iBAAiB;YACnB;QACF;IACF,EAAE,OAAO,OAAO;QACd,QAAQ,KAAK,CAAC,qDAAqD;QACnE,OAAO,8JAAY,CAAC,IAAI,CAAC;YAAE,OAAO;QAA6B,GAAG;YAAE,QAAQ;QAAI;IAClF;AACF","debugId":null}}]
-}

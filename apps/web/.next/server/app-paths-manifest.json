@@ -1,5 +1,4 @@
 {
-  "/api/news/live/route": "app/api/news/live/route.js",
   "/comparisons/page": "app/comparisons/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/learn/page": "app/learn/page.js",

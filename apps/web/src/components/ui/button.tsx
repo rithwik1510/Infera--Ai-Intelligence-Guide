@@ -5,28 +5,29 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-semibold transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-white/20 active:scale-95",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default:
+          "bg-white text-black hover:bg-white/90 shadow-[0_0_20px_-5px_rgba(255,255,255,0.3)]",
         destructive:
-          "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+          "bg-red-500/10 text-red-500 hover:bg-red-500/20 border border-red-500/20",
         outline:
-          "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+          "border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 hover:text-white text-[var(--color-muted)] shadow-inner",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+          "bg-[var(--color-surface-elevated)] text-[var(--color-foreground)] border border-white/5 hover:bg-[var(--color-surface-elevated)]/80 hover:border-white/10",
         ghost:
-          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
-        link: "text-primary underline-offset-4 hover:underline",
+          "hover:bg-white/5 hover:text-white text-[var(--color-muted)]",
+        link: "text-[var(--accent-primary)] underline-offset-4 hover:underline",
+        premium: "relative bg-gradient-to-b from-white/10 to-transparent border border-white/10 hover:border-white/20 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_0_15px_-3px_rgba(255,255,255,0.1)]",
       },
       size: {
-        default: "h-10 gap-2 px-6 has-[>svg]:px-6",
-        sm: "h-8 rounded-md gap-2 px-4 has-[>svg]:px-4",
-        lg: "h-12 rounded-md px-8 has-[>svg]:px-8",
-        icon: "size-10",
-        "icon-sm": "size-8",
-        "icon-lg": "size-12",
+        default: "h-10 px-5",
+        sm: "h-8 rounded-md px-3 text-xs",
+        lg: "h-12 rounded-xl px-8 text-base",
+        icon: "size-10 rounded-lg",
+        "icon-sm": "size-8 rounded-md",
       },
     },
     defaultVariants: {

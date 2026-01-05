@@ -88,35 +88,44 @@
 
 [data-theme="light"] {
   color-scheme: light;
-  --background: #F9FAFB;
-  --background-alt: #F1F5F9;
+  --background: #FAFAFA;
+  /* Crisp, clean off-white */
+  --background-alt: #F4F4F5;
   --surface: #FFFFFF;
-  --surface-muted: #F1F5F9;
-  --surface-elevated: #E2E8F0;
-  --surface-glass: rgba(255, 255, 255, 0.9);
-  --border-soft: rgba(15, 23, 42, 0.08);
-  --border-strong: rgba(15, 23, 42, 0.16);
-  --foreground: #0F172A;
-  --foreground-muted: #334155;
+  --surface-muted: #F4F4F5;
+  --surface-elevated: #FFFFFF;
+  --surface-glass: rgba(255, 255, 255, 0.75);
+  --border-soft: rgba(24, 24, 27, 0.06);
+  /* Lighter, less harsh border */
+  --border-strong: rgba(24, 24, 27, 0.12);
+  --foreground: #18181B;
+  /* Zinc-900 instead of slate for a sharper look */
+  --foreground-muted: #71717A;
+  /* Zinc-500 */
   --accent-primary: #2563EB;
   --accent-primary-deep: #1E3A8A;
-  --accent-secondary: #06B6D4;
-  --accent-tertiary: #8B5CF6;
-  --accent-quaternary: #F59E0B;
-  --accent-green: #10B981;
-  --surface-highlight: rgba(255, 255, 255, 0.82);
-  --surface-highlight-strong: rgba(255, 255, 255, 0.92);
-  --surface-shadow: rgba(15, 23, 42, 0.18);
-  --shadow-elevated-layer: 0 24px 48px rgba(15, 23, 42, 0.18), 0 12px 24px rgba(15, 23, 42, 0.12);
-  --shadow-elevated-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.7);
-  --shadow-elevated-cushion: inset 0 -12px 24px rgba(30, 41, 59, 0.12);
-  --shadow-sunken-top: inset 0 1px 4px rgba(255, 255, 255, 0.78);
-  --shadow-sunken-bottom: inset 0 -12px 22px rgba(30, 41, 59, 0.18);
-  --glow-primary: rgba(59, 130, 246, 0.28);
-  --glow-secondary: rgba(14, 165, 233, 0.18);
-  --glow-tertiary: rgba(96, 165, 250, 0.18);
-  --bg-gradient-base: rgba(249, 250, 251, 0.94);
-  --bg-gradient-falloff: rgba(241, 245, 249, 1);
+  --accent-secondary: #0891B2;
+  /* Cyan-600, slightly darker for contrast on white */
+  --accent-tertiary: #7C3AED;
+  --accent-quaternary: #EA580C;
+  --accent-green: #059669;
+  --surface-highlight: rgba(0, 0, 0, 0.03);
+  --surface-highlight-strong: rgba(0, 0, 0, 0.06);
+  --surface-shadow: rgba(24, 24, 27, 0.08);
+  /* Lighter shadow base */
+  /* Colored/Tinted shadows for that premium glass feel */
+  --shadow-elevated-layer: 0 20px 40px -4px rgba(24, 24, 27, 0.08), 0 8px 16px -4px rgba(24, 24, 27, 0.04);
+  --shadow-elevated-highlight: inset 0 1px 0 rgba(255, 255, 255, 1);
+  --shadow-elevated-cushion: inset 0 -4px 12px rgba(24, 24, 27, 0.03);
+  --shadow-sunken-top: inset 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-sunken-bottom: inset 0 -4px 12px rgba(0, 0, 0, 0.02);
+  --glow-primary: rgba(37, 99, 235, 0.12);
+  /* Subtle colored bleeding */
+  --glow-secondary: rgba(8, 145, 178, 0.08);
+  --glow-tertiary: rgba(124, 58, 237, 0.08);
+  --bg-gradient-base: rgba(250, 250, 250, 0.85);
+  /* Matches --background */
+  --bg-gradient-falloff: rgba(244, 244, 245, 1);
 }
 
 @theme inline {
@@ -182,15 +191,15 @@
 body {
   background-color: var(--background);
   background-image:
-    radial-gradient(circle at 12% -10%, var(--glow-primary), transparent 55%),
-    radial-gradient(circle at 82% 4%, var(--glow-secondary), transparent 60%),
+    radial-gradient(circle at 15% -5%, var(--glow-primary), transparent 50%),
+    radial-gradient(circle at 85% 5%, var(--glow-secondary), transparent 50%),
     linear-gradient(180deg, var(--bg-gradient-base), var(--bg-gradient-falloff));
   background-attachment: fixed;
   font-family: var(--font-body);
   min-height: 100vh;
   font-size: 16px;
-  line-height: 1.68;
-  letter-spacing: 0.01em;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
   position: relative;
 }
@@ -200,39 +209,43 @@ body::after {
   content: "";
   position: fixed;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.7'/%3E%3C/svg%3E");
-  opacity: var(--noise-opacity);
-  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+  opacity: 0.4;
+  mix-blend-mode: overlay;
   z-index: -1;
 }
 
 @keyframes mesh-flow {
   0% {
-    transform: translate3d(-12%, -12%, 0) scale(1);
-    opacity: 0.28;
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.4;
   }
+
   50% {
-    transform: translate3d(10%, 8%, 0) scale(1.08);
-    opacity: 0.55;
+    transform: translate3d(5%, 5%, 0) scale(1.1);
+    opacity: 0.6;
   }
+
   100% {
-    transform: translate3d(-12%, -12%, 0) scale(1);
-    opacity: 0.28;
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.4;
   }
 }
 
 .mesh-flow {
   background:
-    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.18), transparent 55%),
-    radial-gradient(circle at 78% 34%, rgba(6, 182, 212, 0.25), transparent 65%),
-    radial-gradient(circle at 48% 80%, rgba(37, 99, 235, 0.22), transparent 72%);
-  animation: mesh-flow 10s ease-in-out infinite;
-  mix-blend-mode: screen;
+    radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.4), transparent 45%),
+    radial-gradient(circle at 80% 40%, rgba(6, 182, 212, 0.35), transparent 45%),
+    radial-gradient(circle at 40% 80%, rgba(139, 92, 246, 0.3), transparent 45%);
+  animation: mesh-flow 15s ease-in-out infinite;
+  mix-blend-mode: color-dodge;
+  filter: blur(80px);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .mesh-flow {
     animation: none;
+    opacity: 0.5;
   }
 }
 
@@ -339,12 +352,14 @@ a:hover {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -353,4 +368,14 @@ a:hover {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Party Mode (Konami Code) */
+.party-mode {
+  animation: party-rainbow 4s linear infinite;
+}
+
+@keyframes party-rainbow {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
 }

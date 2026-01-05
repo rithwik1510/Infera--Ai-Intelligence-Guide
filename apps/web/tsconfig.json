@@ -10,9 +10,15 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@ai-helper/types": ["../../packages/types/src"],
-      "@ai-helper/types/*": ["../../packages/types/src/*"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@ai-helper/types": [
+        "../../packages/types/src"
+      ],
+      "@ai-helper/types/*": [
+        "../../packages/types/src/*"
+      ]
     }
   },
   "include": [
@@ -21,10 +27,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules"],
-  "references": [
-    {
-      "path": "../../packages/types"
-    }
+  "exclude": [
+    "node_modules"
   ]
 }

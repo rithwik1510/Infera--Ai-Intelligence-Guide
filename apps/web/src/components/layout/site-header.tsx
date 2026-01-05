@@ -8,29 +8,28 @@ import { AccountMenu } from "../navigation/account-menu";
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--border-soft)]/80 bg-[var(--color-background)]/65 backdrop-blur-2xl">
-      <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-6 px-6 py-6 sm:px-12 md:px-16 lg:px-16 xl:px-20">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between md:gap-6">
-          <Link href="/" className="group inline-flex flex-col gap-1 text-left">
-            <span className="text-[10px] font-semibold uppercase tracking-[0.52em] text-[var(--color-muted)]/80">Infera Intelligence</span>
-            <span className="text-3xl font-semibold tracking-tight text-[var(--color-foreground)] transition-colors group-hover:text-[var(--color-accent-primary)] sm:text-[2.3rem]">
+    <header className="sticky top-0 z-50 border-b border-white/5 bg-[var(--color-background)]/60 backdrop-blur-xl supports-[backdrop-filter]:bg-[var(--color-background)]/20">
+      <div className="mx-auto flex h-16 w-full max-w-[1800px] items-center justify-between px-6 sm:px-10 md:px-14 lg:px-16 xl:px-20">
+        <div className="flex items-center gap-12">
+          <Link href="/" className="group flex items-center gap-2">
+            <div className="h-6 w-6 rounded-full bg-gradient-to-tr from-[var(--accent-primary)] to-[var(--accent-secondary)]" />
+            <span className="font-heading text-xl font-semibold tracking-tight text-[var(--color-foreground)]">
               Infera
             </span>
           </Link>
-          <div className="hidden items-center gap-6 md:flex">
+          <div className="hidden md:block">
             <PrimaryNav items={primaryNav} instanceId="desktop-primary" />
-            <AccountMenu />
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between md:gap-6">
-          <div className="md:hidden">
-            <PrimaryNav items={primaryNav} instanceId="mobile-primary" />
-          </div>
-          <div className="w-full md:max-w-xl">
+        <div className="flex items-center gap-4">
+          <div className="hidden w-full max-w-sm md:block">
             <GlobalSearch />
           </div>
-          <div className="flex items-center justify-end gap-2 md:hidden">
+          <div className="flex items-center gap-2">
+            <div className="md:hidden">
+              <PrimaryNav items={primaryNav} instanceId="mobile-primary" />
+            </div>
             <AccountMenu />
           </div>
         </div>

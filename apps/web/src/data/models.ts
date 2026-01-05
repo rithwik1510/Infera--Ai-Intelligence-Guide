@@ -2,6 +2,65 @@ import type { ModelDirectoryEntry } from "@ai-helper/types";
 
 export const modelDirectory: ModelDirectoryEntry[] = [
   {
+    id: "llama-4-405b",
+    name: "Llama 4 405B Multimodal",
+    provider: "Meta",
+    releaseDate: "2025-10-15",
+    contextWindow: 128000,
+    pricing: {
+      currency: "USD",
+      flatRate: 0,
+    },
+    licensing: "open-source",
+    deployment: "self-host",
+    website: "https://ai.meta.com/blog/llama-4-405b",
+    tags: ["open-weight", "multimodal", "flagship"],
+    sourceUrls: [
+      "https://ai.meta.com/blog/llama-4-405b",
+      "https://github.com/meta-llama",
+    ],
+  },
+  {
+    id: "openai-o2",
+    name: "OpenAI O2",
+    provider: "OpenAI",
+    releaseDate: "2025-11-10",
+    contextWindow: 200000,
+    pricing: {
+      currency: "USD",
+      input: 15,
+      output: 60,
+    },
+    licensing: "proprietary",
+    deployment: "api",
+    website: "https://openai.com/o2",
+    tags: ["reasoning", "math", "coding"],
+    sourceUrls: [
+      "https://openai.com/o2",
+      "https://platform.openai.com/docs/models#o2",
+    ],
+  },
+  {
+    id: "gemini-3-ultra-preview",
+    name: "Gemini 3 Ultra (Preview)",
+    provider: "Google DeepMind",
+    releaseDate: "2025-12-05",
+    contextWindow: 10000000,
+    pricing: {
+      currency: "USD",
+      input: 10,
+      output: 30,
+    },
+    licensing: "proprietary",
+    deployment: "api",
+    website: "https://deepmind.google/gemini-3",
+    tags: ["infinite-context", "multimodal", "preview"],
+    sourceUrls: [
+      "https://deepmind.google/gemini-3",
+      "https://ai.google.dev/gemini-api",
+    ],
+  },
+  {
     id: "gpt-5",
     name: "GPT-5",
     provider: "OpenAI",

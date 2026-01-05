@@ -75,6 +75,86 @@ export const newsSources: NewsSource[] = [
 
 export const placeholderNews: NewsArticle[] = [
   {
+    id: "2025-12-nvidia-blackwell-consumer",
+    title: "NVIDIA brings Blackwell architecture to consumer GPUs with RTX 5090",
+    slug: "nvidia-blackwell-rtx-5090",
+    sourceId: "huggingface", // Using generic tech source or closest match
+    url: "https://nvidianews.nvidia.com/news/geforce-rtx-5090",
+    summary:
+      "The RTX 5090 delivers 2.5x inference speedup for local FP4 LLMs, enabling desktop-class 70B model serving.",
+    tags: ["hardware", "edge", "inference"],
+    publishedAt: "2025-12-20T10:00:00Z",
+    githubRepo: undefined,
+    heroImage: "https://images.nvidia.com/geforce-rtx-5090-card.jpg",
+    score: 99,
+    content: [
+      "NVIDIA's new Tensor Cores support native FP4 precision, doubling the effective memory capacity for local weights.",
+      "The 5090 ships with 48GB of GDDR7 memory, allowing unquantized Llama 3 70B execution.",
+      "Driver updates include direct optimizations for Ollama and LM Studio pipelines.",
+    ],
+  },
+  {
+    id: "2025-12-gemini-3-preview",
+    title: "Google DeepMind previews Gemini 3 Ultra with infinite context",
+    slug: "gemini-3-ultra-preview",
+    sourceId: "deepmind",
+    url: "https://blog.google/technology/google-deepmind/gemini-3-preview",
+    summary:
+      "Gemini 3 Ultra abandons fixed context windows for dynamic state retention, enabling year-long memory horizons.",
+    tags: ["gemini", "research", "infinite-context"],
+    publishedAt: "2025-12-05T09:00:00Z",
+    githubRepo: undefined,
+    heroImage: "https://lh3.googleusercontent.com/gemini-3-hero.jpg",
+    score: 97,
+    content: [
+      "The new 'Memory Stream' architecture allows the model to index and recall project history without re-processing tokens.",
+      "Benchmarks show zero degradation in reasoning performance over 10 million tokens of continuous conversation.",
+      "Preview access is rolling out to Google Cloud Vertex AI customers in select regions.",
+    ],
+  },
+  {
+    id: "2025-11-openai-o2",
+    title: "OpenAI releases O2: The next leap in reasoning chains",
+    slug: "openai-o2-reasoning",
+    sourceId: "openai",
+    url: "https://openai.com/blog/o2-reasoning-model",
+    summary:
+      "O2 reduces 'thinking' latency by 40% while achieving SOTA on math and coding benchmarks, introducing 'silent thoughts' for interpretability.",
+    tags: ["reasoning", "math", "coding"],
+    publishedAt: "2025-11-10T14:30:00Z",
+    githubRepo: undefined,
+    heroImage: "https://openai.com/images/o2-hero.png",
+    score: 96,
+    content: [
+      "O2 introduces 'Verified chains', allowing the model to double-check its own logic steps against formal solvers.",
+      "The API supports 'thought streaming', letting developers visualize the model's intermediate reasoning states.",
+      "Pricing is decoupled: lower costs for standard generation, premium pricing for deep reasoning paths.",
+    ],
+  },
+  {
+    id: "2025-10-llama-4-405b",
+    title: "Meta Llama 4 405B sets new open-weight standard",
+    slug: "meta-llama-4-405b",
+    sourceId: "meta",
+    url: "https://ai.meta.com/blog/llama-4-405b",
+    summary:
+      "The 405B parameter flagship brings GPT-5 class capabilities to open weights, with native multimodal understanding.",
+    tags: ["open-source", "multimodal", "flagship"],
+    publishedAt: "2025-10-15T12:00:00Z",
+    githubRepo: {
+      fullName: "meta-llama/llama4",
+      stars: 82000,
+      deltaStars: 15000,
+    },
+    heroImage: "https://ai.meta.com/images/llama-4-405b-hero.jpg",
+    score: 98,
+    content: [
+      "Llama 4 405B is the first open model to natively ingest video and audio without separate encoders.",
+      "Meta partnered with AWS and Azure to provide one-click fine-tuning recipes for the massive model.",
+      "Community benchmarks report it matching proprietary frontiers on HumanEval and MMLU-Pro.",
+    ],
+  },
+  {
     id: "2025-09-openai-gpt5",
     title: "OpenAI launches GPT-5 with unified realtime intelligence",
     slug: "openai-gpt-5-launch",
@@ -279,15 +359,15 @@ export const placeholderNews: NewsArticle[] = [
 ];
 
 export const weeklyDigest: WeeklyDigest = {
-  weekOf: "2025-09-15",
-  headline: "Weekly Digest | GPT-5, Claude 4.2, and Gemini 2.5 headline a breakthrough week",
+  weekOf: "2025-12-22",
+  headline: "Weekly Digest | Gemini 3, O2, and Blackwell define the year-end AI surge",
   summary:
-    "OpenAI, Anthropic, and Google DeepMind launched new flagship models while xAI and Perplexity rolled out agent upgrades.",
+    "Google DeepMind previews Gemini 3, OpenAI ships O2 reasoning, and NVIDIA brings data-center class inference to consumers.",
   articleIds: [
+    "2025-12-nvidia-blackwell-consumer",
+    "2025-12-gemini-3-preview",
+    "2025-11-openai-o2",
+    "2025-10-llama-4-405b",
     "2025-09-openai-gpt5",
-    "2025-08-anthropic-claude-4-2-sonnet",
-    "2025-07-gemini-2-5-pro",
-    "2025-06-xai-grok-4",
-    "2025-05-perplexity-sonar-ultra",
   ],
 };

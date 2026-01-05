@@ -1,9 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from "framer-motion";
 import { Bar, BarChart, CartesianGrid, LabelList, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { ChevronDown, BarChart2, Check } from "lucide-react";
 
 import type { ComparisonConfig, ModelProfile } from "@ai-helper/types";
 
@@ -141,6 +142,78 @@ function calcAverageNormalized(model: ComparisonModel, benchmarks: BenchmarkConf
   if (!values.length) return null;
   const average = values.reduce((sum, value) => sum + value, 0) / values.length;
   return average;
+}
+
+// Compact Benchmark Selector Component
+function BenchmarkSelector({
+  benchmarks,
+  activeId,
+  onChange
+}: {
+  benchmarks: BenchmarkConfig[];
+  activeId: string;
+  onChange: (id: string) => void
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const activeBenchmark = benchmarks.find(b => b.id === activeId) || benchmarks[0];
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div className="relative" ref={containerRef}>
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-2 rounded-lg border border-[var(--border-soft)]/50 bg-[var(--color-surface)]/50 px-4 py-2.5 text-sm font-medium text-[var(--color-foreground)] transition-colors hover:bg-[var(--color-surface-elevated)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-primary)]"
+      >
+        <span className="text-[var(--color-muted)] text-xs uppercase tracking-wider">Benchmark:</span>
+        <span className="min-w-[120px] text-left">{activeBenchmark?.name}</span>
+        <ChevronDown className={`h-4 w-4 text-[var(--color-muted)] transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 8, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 8, scale: 0.95 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+            className="absolute left-0 top-full z-50 mt-2 max-h-[300px] w-[280px] overflow-y-auto rounded-xl border border-[var(--border-soft)] bg-[var(--color-surface-elevated)] p-1 shadow-2xl backdrop-blur-xl"
+          >
+            {benchmarks.map((benchmark) => (
+              <button
+                key={benchmark.id}
+                onClick={() => {
+                  onChange(benchmark.id);
+                  setIsOpen(false);
+                }}
+                className={`flex w-full flex-col gap-1 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-[var(--color-surface-highlight)] ${activeId === benchmark.id ? "bg-[var(--color-surface-highlight-strong)]" : ""
+                  }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className={`text-sm font-medium ${activeId === benchmark.id ? "text-[var(--color-accent-primary)]" : "text-[var(--color-foreground)]"}`}>
+                    {benchmark.name}
+                  </span>
+                  {activeId === benchmark.id && <Check className="h-3.5 w-3.5 text-[var(--color-accent-primary)]" />}
+                </div>
+                <span className="text-xs text-[var(--color-muted)] line-clamp-1">{benchmark.description}</span>
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
 }
 
 export function ComparisonExperience({ config, models }: ComparisonExperienceProps) {
@@ -281,33 +354,33 @@ export function ComparisonExperience({ config, models }: ComparisonExperiencePro
     () =>
       reduceMotion
         ? {
-            hidden: { opacity: 0 },
-            visible: { opacity: 1, transition: { duration: 0.0001 } },
-            exit: { opacity: 0, transition: { duration: 0.0001 } },
-          }
+          hidden: { opacity: 0 },
+          visible: { opacity: 1, transition: { duration: 0.0001 } },
+          exit: { opacity: 0, transition: { duration: 0.0001 } },
+        }
         : {
-            hidden: { opacity: 0, y: 36, scale: 0.98, filter: "blur(18px)" },
-            visible: {
-              opacity: 1,
-              y: 0,
-              scale: 1,
-              filter: "blur(0px)",
-              transition: {
-                duration: designTokens.motion.duration.medium / 1000,
-                ease: designTokens.motion.easing.entrance,
-              },
-            },
-            exit: {
-              opacity: 0,
-              y: -28,
-              scale: 0.985,
-              filter: "blur(10px)",
-              transition: {
-                duration: designTokens.motion.duration.fast / 1000,
-                ease: designTokens.motion.easing.exit,
-              },
+          hidden: { opacity: 0, y: 36, scale: 0.98, filter: "blur(18px)" },
+          visible: {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            filter: "blur(0px)",
+            transition: {
+              duration: designTokens.motion.duration.medium / 1000,
+              ease: designTokens.motion.easing.entrance,
             },
           },
+          exit: {
+            opacity: 0,
+            y: -28,
+            scale: 0.985,
+            filter: "blur(10px)",
+            transition: {
+              duration: designTokens.motion.duration.fast / 1000,
+              ease: designTokens.motion.easing.exit,
+            },
+          },
+        },
     [reduceMotion]
   );
 
@@ -315,20 +388,20 @@ export function ComparisonExperience({ config, models }: ComparisonExperiencePro
     () =>
       reduceMotion
         ? {
-            hidden: { opacity: 0 },
-            visible: { opacity: 1, transition: { duration: 0.0001 } },
-          }
+          hidden: { opacity: 0 },
+          visible: { opacity: 1, transition: { duration: 0.0001 } },
+        }
         : {
-            hidden: { opacity: 0, y: 14 },
-            visible: {
-              opacity: 1,
-              y: 0,
-              transition: {
-                duration: designTokens.motion.duration.fast / 1000,
-                ease: designTokens.motion.easing.standard,
-              },
+          hidden: { opacity: 0, y: 14 },
+          visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+              duration: designTokens.motion.duration.fast / 1000,
+              ease: designTokens.motion.easing.standard,
             },
           },
+        },
     [reduceMotion]
   );
 
@@ -337,9 +410,9 @@ export function ComparisonExperience({ config, models }: ComparisonExperiencePro
       reduceMotion
         ? { duration: 0.0001 }
         : {
-            duration: designTokens.motion.duration.medium / 1000,
-            ease: designTokens.motion.easing.standard,
-          },
+          duration: designTokens.motion.duration.medium / 1000,
+          ease: designTokens.motion.easing.standard,
+        },
     [reduceMotion]
   );
 
@@ -348,11 +421,11 @@ export function ComparisonExperience({ config, models }: ComparisonExperiencePro
       reduceMotion
         ? { duration: 0.0001 }
         : {
-            type: "spring",
-            stiffness: 420,
-            damping: 34,
-            mass: 0.6,
-          },
+          type: "spring",
+          stiffness: 420,
+          damping: 34,
+          mass: 0.6,
+        },
     [reduceMotion]
   );
 
@@ -396,40 +469,184 @@ export function ComparisonExperience({ config, models }: ComparisonExperiencePro
 
   const comparisonRows = useMemo<BenchmarkChartRow[]>(() => {
     if (!activeBenchmark) return [];
-    const rows = selectedModels
-      .map((model) => {
-        const score = getBenchmarkScore(model, activeBenchmark.id);
-        const normalized =
-          typeof score?.normalizedScore === "number" ? score.normalizedScore * 100 : null;
-        const raw = typeof score?.score === "number" ? score.score : null;
-        const value = scoreMode === "normalized" ? normalized : raw;
-        if (value === null) {
-          return null;
-        }
-        const formatted =
-          scoreMode === "normalized"
-            ? formatPercent(value)
-            : activeBenchmark.unit === "%"
-              ? formatPercent(value)
-              : formatDecimal(value, activeBenchmark.unit === "score" ? 2 : 1);
-        return {
+
+    return selectedModels.reduce<BenchmarkChartRow[]>((acc, model) => {
+      const score = getBenchmarkScore(model, activeBenchmark.id);
+      const normalized =
+        typeof score?.normalizedScore === "number" ? score.normalizedScore * 100 : null;
+      const raw = typeof score?.score === "number" ? score.score : null;
+      const value = scoreMode === "normalized" ? normalized : raw;
+
+      if (value !== null) {
+        acc.push({
           modelId: model.id,
           name: model.name,
           provider: model.provider,
           value,
-          formatted,
+          formatted:
+            scoreMode === "normalized"
+              ? formatPercent(value)
+              : activeBenchmark.unit === "%"
+                ? formatPercent(value)
+                : formatDecimal(value, activeBenchmark.unit === "score" ? 2 : 1),
           color: getModelColor(model.id),
-        };
-      })
-      .filter((row): row is BenchmarkChartRow => row !== null)
-      .sort((a, b) => b.value - a.value);
-    return rows;
+        });
+      }
+      return acc;
+    }, []).sort((a, b) => b.value - a.value);
   }, [activeBenchmark, scoreMode, selectedModels, getModelColor]);
 
   const comparisonMaxValue = useMemo(
     () => comparisonRows.reduce((max, row) => Math.max(max, row.value), 0),
     [comparisonRows]
   );
+
+  // New Render Component for Chart with Restructured Layout
+  const renderChartLayout = () => {
+    const chartHasData = comparisonRows.length > 0;
+    const chartUnit = scoreMode === "normalized" ? "%" : activeBenchmark?.unit ?? "";
+    const tooltipFormatter = (value: number) =>
+      scoreMode === "normalized" || chartUnit === "%"
+        ? formatPercent(Number(value))
+        : formatDecimal(Number(value), chartUnit === "score" ? 2 : 1);
+    const yAxisMax =
+      scoreMode === "normalized"
+        ? 100
+        : Math.max(
+          chartUnit === "%" ? 100 : 0,
+          comparisonMaxValue > 0 ? Math.ceil(comparisonMaxValue / 5) * 5 : 10,
+        );
+
+    return (
+      <div className="flex flex-col gap-6">
+        {/* Top Control Bar */}
+        <div className="flex flex-wrap items-center justify-between gap-4 rounded-[var(--radius-xl)] border border-[var(--border-soft)]/60 bg-[var(--color-surface)]/80 p-4 shadow-[var(--shadow-soft)] backdrop-blur-md">
+          <div className="flex items-center gap-4">
+            <BenchmarkSelector
+              benchmarks={benchmarks}
+              activeId={activeBenchmarkId}
+              onChange={setActiveBenchmarkId}
+            />
+            <div className="h-6 w-px bg-[var(--border-soft)]" />
+            <div className="flex items-center gap-1">
+              {(["normalized", "raw"] as const).map((mode) => {
+                const isActive = scoreMode === mode;
+                return (
+                  <button
+                    key={mode}
+                    type="button"
+                    onClick={() => setScoreMode(mode)}
+                    aria-pressed={isActive}
+                    className={`rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-wider transition-colors ${isActive
+                      ? "bg-[var(--color-foreground)] text-[var(--color-background)]"
+                      : "text-[var(--color-muted)] hover:text-[var(--color-foreground)]"
+                      }`}
+                  >
+                    {mode}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="text-xs text-[var(--color-muted)] italic max-w-sm text-right hidden lg:block">
+            {scoreMode === "normalized"
+              ? "Rescaled 0-100 for easy comparison"
+              : `Raw benchmark unit: ${chartUnit}`}
+          </div>
+        </div>
+
+        {/* Horizontal Leaderboard Cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {normalizedScoresSorted.map(({ model, average }, index) => {
+            const color = getModelColor(model.id);
+            return (
+              <div key={model.id} className="relative overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border-soft)]/50 bg-[var(--color-surface)]/40 p-3 transition-transform hover:-translate-y-1">
+                <div className="absolute left-0 top-0 h-full w-1" style={{ background: color }} />
+                <div className="flex items-start justify-between">
+                  <div className="flex flex-col">
+                    <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-[var(--color-muted)]">{model.provider}</span>
+                    <span className="text-sm font-bold text-[var(--color-foreground)] line-clamp-1">{model.name}</span>
+                    <span className="mt-1 flex items-center gap-1 text-[10px] text-[var(--color-muted)]/80">
+                      <BarChart2 className="h-3 w-3" />
+                      Rank #{index + 1}
+                    </span>
+                  </div>
+                  <div className="flex flex-col items-end">
+                    <span className="text-lg font-bold text-[var(--color-foreground)]">{formatPercent(average)}</span>
+                    <span className="text-[9px] uppercase tracking-wider text-[var(--color-muted)]">Avg</span>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Main Chart Area */}
+        <div className="rounded-[var(--radius-xl)] border border-[var(--border-soft)]/60 bg-[var(--color-surface)]/80 p-6 shadow-[var(--shadow-depth)]">
+          {chartHasData ? (
+            <div className="h-[450px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={comparisonRows}
+                  layout="vertical"
+                  margin={{ top: 10, right: 30, left: 0, bottom: 5 }}
+                >
+                  <CartesianGrid horizontal={false} strokeOpacity={0.1} />
+                  <XAxis
+                    type="number"
+                    domain={[0, yAxisMax]}
+                    stroke="currentColor"
+                    strokeOpacity={0.3}
+                    tick={{ fill: "currentColor", opacity: 0.6, fontSize: 11 }}
+                    tickFormatter={(value) =>
+                      scoreMode === "normalized" || chartUnit === "%"
+                        ? `${Math.round(Number(value))}`
+                        : formatDecimal(Number(value), chartUnit === "score" ? 2 : 1)
+                    }
+                  />
+                  <YAxis
+                    type="category"
+                    dataKey="name"
+                    width={180}
+                    stroke="none"
+                    tick={{ fill: "currentColor", opacity: 0.9, fontSize: 13, fontWeight: 500 }}
+                  />
+                  <Tooltip
+                    cursor={{ fill: "rgba(120,120,120,0.1)" }}
+                    contentStyle={{
+                      backgroundColor: "var(--color-surface-elevated)",
+                      borderColor: "var(--border-soft)",
+                      borderRadius: "12px",
+                      boxShadow: "var(--shadow-soft)"
+                    }}
+                    itemStyle={{ color: "var(--color-foreground)" }}
+                    formatter={(value: number | string) =>
+                      typeof value === "number" ? tooltipFormatter(value) : value
+                    }
+                  />
+                  <Bar dataKey="value" radius={[0, 6, 6, 0]} barSize={32}>
+                    {comparisonRows.map((row) => (
+                      <Cell key={row.modelId} fill={row.color} />
+                    ))}
+                    <LabelList
+                      dataKey="formatted"
+                      position="right"
+                      style={{ fill: "var(--color-foreground)", fontSize: 12, fontWeight: 600, opacity: 0.8 }}
+                    />
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          ) : (
+            <div className="flex h-64 items-center justify-center rounded-lg border border-dashed border-[var(--border-soft)] bg-white/5 p-8 text-center text-[var(--color-muted)]">
+              No data available for this configuration.
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
 
   const tabPanel = (() => {
     switch (activeTab) {
@@ -466,322 +683,16 @@ export function ComparisonExperience({ config, models }: ComparisonExperiencePro
       case "charts": {
         if (!isHydrated) {
           return (
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-6 xl:grid-cols-[320px_1fr]">
-                <div className="flex flex-col gap-4">
-                  <div className="h-40 rounded-[var(--radius-xl)] border border-[var(--border-soft)]/50 bg-[var(--color-surface)]/40 animate-pulse" />
-                  <div className="h-48 rounded-[var(--radius-xl)] border border-[var(--border-soft)]/50 bg-[var(--color-surface)]/40 animate-pulse" />
-                </div>
-                <div className="hidden flex-col gap-6 xl:flex">
-                  <div className="h-[500px] rounded-[var(--radius-xl)] border border-[var(--border-soft)]/50 bg-[var(--color-surface)]/40 animate-pulse" />
-                  <div className="h-[380px] rounded-[var(--radius-xl)] border border-[var(--border-soft)]/50 bg-[var(--color-surface)]/40 animate-pulse" />
-                </div>
+            <div className="flex flex-col gap-6 animate-pulse">
+              <div className="h-20 w-full rounded-xl bg-[var(--color-surface)]/40" />
+              <div className="grid grid-cols-4 gap-4">
+                {[1, 2, 3, 4].map(i => <div key={i} className="h-24 rounded-xl bg-[var(--color-surface)]/40" />)}
               </div>
-              <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 xl:hidden">
-                <div className="h-[420px] w-[85vw] shrink-0 rounded-[var(--radius-xl)] border border-[var(--border-soft)]/50 bg-[var(--color-surface)]/40 animate-pulse" />
-                <div className="h-[360px] w-[85vw] shrink-0 rounded-[var(--radius-xl)] border border-[var(--border-soft)]/50 bg-[var(--color-surface)]/40 animate-pulse" />
-              </div>
+              <div className="h-[400px] w-full rounded-xl bg-[var(--color-surface)]/40" />
             </div>
           );
         }
-
-        const chartHasData = comparisonRows.length > 0;
-        const chartUnit = scoreMode === "normalized" ? "%" : activeBenchmark?.unit ?? "";
-        const tooltipFormatter = (value: number) =>
-          scoreMode === "normalized" || chartUnit === "%"
-            ? formatPercent(Number(value))
-            : formatDecimal(Number(value), chartUnit === "score" ? 2 : 1);
-        const chartDescription =
-          scoreMode === "normalized"
-            ? "Normalized benchmark scores rescaled to 0–100 for a quick read of relative performance."
-            : `Raw ${chartUnit || ""} benchmark values sourced from provider scorecards and public leaderboards.`;
-        const yAxisMax =
-          scoreMode === "normalized"
-            ? 100
-            : Math.max(
-                chartUnit === "%" ? 100 : 0,
-                comparisonMaxValue > 0 ? Math.ceil(comparisonMaxValue / 5) * 5 : 10,
-              );
-
-        const renderChartCard = () => (
-          <section className="rounded-[var(--radius-xl)] border border-[var(--border-soft)]/60 bg-[var(--color-surface)] p-6 shadow-[var(--shadow-depth)]/60">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="flex flex-wrap gap-2">
-                {benchmarks.map((benchmark) => {
-                  const isActive = benchmark.id === activeBenchmarkId;
-                  return (
-                    <button
-                      key={benchmark.id}
-                      type="button"
-                      onClick={() => setActiveBenchmarkId(benchmark.id)}
-                      aria-pressed={isActive}
-                      className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${
-                        isActive
-                          ? "border-[var(--color-accent)] bg-[var(--color-accent)]/10 text-[var(--color-foreground)]"
-                          : "border-[var(--border-soft)] text-[var(--color-muted)] hover:text-[var(--color-foreground)]"
-                      }`}
-                    >
-                      {benchmark.name}
-                    </button>
-                  );
-                })}
-              </div>
-              <div className="flex items-center gap-2">
-                {(["normalized", "raw"] as const).map((mode) => {
-                  const isActive = scoreMode === mode;
-                  return (
-                    <button
-                      key={mode}
-                      type="button"
-                      onClick={() => setScoreMode(mode)}
-                      aria-pressed={isActive}
-                      className={`rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] transition ${
-                        isActive
-                          ? "border-[var(--color-foreground)] text-[var(--color-foreground)]"
-                          : "border-[var(--border-soft)] text-[var(--color-muted)] hover:text-[var(--color-foreground)]"
-                      }`}
-                    >
-                      {mode === "normalized" ? "Normalized" : "Raw"}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            <p className="mt-3 text-sm text-[var(--color-muted)]">{chartDescription}</p>
-
-            {chartHasData ? (
-              <div className="mt-6 h-[360px] w-full">
-                <ResponsiveContainer>
-                  <BarChart
-                    data={comparisonRows}
-                    layout="vertical"
-                    margin={{ top: 24, right: 24, left: 0, bottom: 16 }}
-                  >
-                    <CartesianGrid horizontal={false} strokeDasharray="4 6" stroke="rgba(255,255,255,0.08)" />
-                    <XAxis
-                      type="number"
-                      domain={[0, yAxisMax]}
-                      stroke="rgba(255,255,255,0.35)"
-                      tick={{ fill: "rgba(255,255,255,0.65)", fontSize: 12 }}
-                      tickFormatter={(value) =>
-                        scoreMode === "normalized" || chartUnit === "%"
-                          ? `${Math.round(Number(value))}`
-                          : formatDecimal(Number(value), chartUnit === "score" ? 2 : 1)
-                      }
-                    />
-                    <YAxis
-                      type="category"
-                      dataKey="name"
-                      width={160}
-                      stroke="rgba(255,255,255,0.65)"
-                      tick={{ fill: "rgba(255,255,255,0.85)", fontSize: 12 }}
-                    />
-                    <Tooltip
-                      cursor={{ fill: "rgba(148,163,184,0.08)" }}
-                      formatter={(value: number | string) =>
-                        typeof value === "number" ? tooltipFormatter(value) : value
-                      }
-                      labelStyle={{ fontSize: 12, color: "rgba(255,255,255,0.75)" }}
-                    />
-                    <Bar dataKey="value" name={activeBenchmark?.name ?? "Benchmark"} radius={[0, 12, 12, 0]}>
-                      {comparisonRows.map((row) => (
-                        <Cell key={row.modelId} fill={row.color} />
-                      ))}
-                      <LabelList
-                        dataKey="formatted"
-                        position="right"
-                        content={({ x, y, width, height, value }) => {
-                          if (
-                            typeof x !== "number" ||
-                            typeof y !== "number" ||
-                            typeof width !== "number" ||
-                            typeof height !== "number"
-                          ) {
-                            return null;
-                          }
-                          return (
-                            <text
-                              x={x + width + 12}
-                              y={y + height / 2}
-                              fill="var(--color-foreground)"
-                              fontSize={13}
-                              fontWeight={500}
-                              textAnchor="start"
-                              dominantBaseline="middle"
-                            >
-                              {value as string}
-                            </text>
-                          );
-                        }}
-                      />
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            ) : (
-              <div className="mt-6 rounded-[var(--radius-lg)] border border-dashed border-[var(--border-soft)]/60 bg-[var(--color-surface)]/40 p-6 text-sm text-[var(--color-muted)]">
-                We don&apos;t yet have published results for this benchmark and set of models. Try another benchmark or adjust the selection.
-              </div>
-            )}
-          </section>
-        );
-
-        return (
-          <ErrorBoundary
-            fallback={
-              <div className="rounded-[var(--radius-xl)] border border-dashed border-[var(--border-soft)]/60 bg-[var(--color-surface)]/40 p-6 text-sm text-[var(--color-muted)]">
-                Unable to render comparison charts right now. Please retry in a moment.
-              </div>
-            }
-          >
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-6 xl:grid-cols-[320px_1fr]">
-                <div className="flex flex-col gap-4">
-                  <aside className="rounded-[var(--radius-xl)] border border-[var(--border-soft)]/60 bg-[var(--color-surface)] p-6 shadow-[var(--shadow-soft)]">
-                    <h3 className="text-lg font-medium text-[var(--color-foreground)]">Selected Models</h3>
-                    <p className="mt-2 text-sm text-[var(--color-muted)]">
-                      Color-coded roster with normalized averages to orient the charts.
-                    </p>
-                    <div className="mt-4 flex flex-col gap-3">
-                      {normalizedScoresSorted.map(({ model, average }, index) => {
-                        const color = getModelColor(model.id);
-                        const clamped = Math.min(Math.max(average, 0), 100);
-                        const progressRatio = clamped / 100;
-                        const sanitizedId = model.id.replace(/[^a-zA-Z0-9-]/g, "");
-                        const gradientId = `comparison-progress-${sanitizedId}`;
-                        const strokeDashoffset = PROGRESS_CIRCUMFERENCE * (1 - progressRatio);
-                        const rank = index + 1;
-                        return (
-                          <div
-                            key={model.id}
-                            className="group relative overflow-hidden rounded-[var(--radius-xl)] border border-white/10 bg-[var(--color-surface)]/75 p-5 shadow-[var(--shadow-soft)]/35 backdrop-blur-sm"
-                          >
-                            <span
-                              className="pointer-events-none absolute inset-0 opacity-70"
-                              style={{
-                                background: "radial-gradient(120% 140% at 0% 0%, rgba(255,255,255,0.12), transparent 55%)",
-                              }}
-                            />
-                            <span
-                              className="pointer-events-none absolute inset-0 opacity-40 mix-blend-screen transition-opacity duration-300 group-hover:opacity-65"
-                              style={{
-                                background: "radial-gradient(120% 160% at 100% 100%, rgba(37,99,235,0.32), transparent 62%)",
-                              }}
-                            />
-                            <div className="relative flex items-center gap-5">
-                              <div className="flex-1 space-y-3">
-                                <div className="flex items-center justify-between gap-3">
-                                  <span className="flex items-center gap-2 text-sm font-medium text-[var(--color-foreground)]">
-                                    <span
-                                      className="h-2.5 w-2.5 rounded-full shadow-[0_0_18px_rgba(37,99,235,0.72)] transition-transform duration-300 group-hover:scale-110"
-                                      style={{ background: color }}
-                                    />
-                                    {model.name}
-                                  </span>
-                                  <span className="text-[11px] uppercase tracking-[0.32em] text-[var(--color-muted)]/70">
-                                    {model.provider}
-                                  </span>
-                                </div>
-                                <div className="space-y-1">
-                                  <span className="text-[11px] uppercase tracking-[0.32em] text-[var(--color-muted)]/70">
-                                    Normalized benchmark average
-                                  </span>
-                                  <div className="flex items-end gap-2">
-                                    <span className="text-3xl font-semibold leading-none tracking-tight text-[var(--color-foreground)]">
-                                      {formatPercent(average)}
-                                    </span>
-                                    <span className="pb-1 text-[11px] font-semibold uppercase tracking-[0.28em] text-[var(--color-muted)]/70">
-                                      score
-                                    </span>
-                                  </div>
-                                </div>
-                                <div className="flex items-center justify-between text-xs text-[var(--color-muted)]/80">
-                                  <span>Context {formatNumber(model.context.maxTokens ?? model.contextWindow)} tokens</span>
-                                  <span>Modalities {model.context.modalities.length}</span>
-                                </div>
-                              </div>
-                              <div className="relative flex h-20 w-20 items-center justify-center">
-                                <svg
-                                  width="80"
-                                  height="80"
-                                  viewBox="0 0 80 80"
-                                  className="h-20 w-20"
-                                >
-                                  <defs>
-                                    <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-                                      <stop offset="0%" stopColor={color} stopOpacity={0.95} />
-                                      <stop offset="100%" stopColor="rgba(255,255,255,0.8)" />
-                                    </linearGradient>
-                                  </defs>
-                                  <circle
-                                    cx="40"
-                                    cy="40"
-                                    r={PROGRESS_RADIUS}
-                                    stroke="rgba(255,255,255,0.12)"
-                                    strokeWidth="4"
-                                    fill="transparent"
-                                  />
-                                  <motion.circle
-                                    cx="40"
-                                    cy="40"
-                                    r={PROGRESS_RADIUS}
-                                    stroke={`url(#${gradientId})`}
-                                    strokeWidth="4"
-                                    strokeLinecap="round"
-                                    fill="transparent"
-                                    strokeDasharray={PROGRESS_CIRCUMFERENCE}
-                                    strokeDashoffset={PROGRESS_CIRCUMFERENCE}
-                                    animate={{ strokeDashoffset }}
-                                    transition={progressStrokeTransition}
-                                  />
-                                  <circle
-                                    cx="40"
-                                    cy="40"
-                                    r={PROGRESS_RADIUS - 1}
-                                    stroke="rgba(255,255,255,0.18)"
-                                    strokeWidth="1"
-                                    fill="transparent"
-                                    opacity={0.4}
-                                  />
-                                </svg>
-                                <span className="absolute text-xs font-semibold uppercase tracking-[0.28em] text-[var(--color-muted)]/80">
-                                  #{rank}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </aside>
-
-                  <aside className="rounded-[var(--radius-xl)] border border-[var(--border-soft)]/60 bg-[var(--color-surface)] p-6 shadow-[var(--shadow-soft)]">
-                    <h3 className="text-lg font-medium text-[var(--color-foreground)]">Benchmarks in View</h3>
-                    <p className="mt-2 text-sm text-[var(--color-muted)]">Quick reference for what each test measures.</p>
-                    <div className="mt-4 flex flex-col gap-3">
-                      {benchmarks.map((benchmark) => (
-                        <div key={benchmark.id} className="rounded-2xl border border-[var(--border-soft)]/50 bg-[var(--color-surface)]/70 p-3">
-                          <div className="flex items-center justify-between text-sm text-[var(--color-foreground)]">
-                            <span>{benchmark.name}</span>
-                            <span className="text-xs uppercase tracking-[0.3em] text-[var(--color-foreground)]/60">{benchmark.unit ?? "Score"}</span>
-                          </div>
-                          <p className="mt-1 text-xs leading-relaxed text-[var(--color-muted)]">{benchmark.description}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </aside>
-                </div>
-
-                <div className="hidden xl:block">{renderChartCard()}</div>
-              </div>
-
-              <div className="xl:hidden">
-                {renderChartCard()}
-              </div>
-            </div>
-          </ErrorBoundary>
-        );
+        return renderChartLayout(); // Use new layout
       }
       case "pricing":
         return (
@@ -875,8 +786,8 @@ export function ComparisonExperience({ config, models }: ComparisonExperiencePro
                 {averageLeaders[0] ? (
                   <p>
                     <span className="text-[var(--color-foreground)]">{averageLeaders[0].model.name}</span> leads the pack with an average benchmark score of {
-                    " "
-                  }
+                      " "
+                    }
                     <span className="text-[var(--color-foreground)]">{formatPercent(averageLeaders[0].average)}</span> across the four headline tests.
                     {" "}
                     {averageLeaders[1]
@@ -898,8 +809,8 @@ export function ComparisonExperience({ config, models }: ComparisonExperiencePro
                 {lowestCost ? (
                   <p>
                     For the assumed workload of {formatNumber(usageMillions)}M tokens, <span className="text-[var(--color-foreground)]">{lowestCost.name}</span> delivers the lowest monthly spend at {
-                    " "
-                  }
+                      " "
+                    }
                     <span className="text-[var(--color-foreground)]">{formatCurrency(lowestCost.estimatedMonthly, lowestCost.currency)}</span>.
                   </p>
                 ) : null}
@@ -981,11 +892,10 @@ export function ComparisonExperience({ config, models }: ComparisonExperiencePro
                   onClick={() => toggleModel(model.id)}
                   aria-pressed={isActive}
                   disabled={disableAdd}
-                  className={`group relative overflow-hidden rounded-[var(--radius-xl)] border px-4 py-5 text-left transition ${
-                    isActive
-                      ? "border-white/20 text-[var(--color-foreground)] shadow-[var(--shadow-soft)]"
-                      : "border-[var(--border-soft)]/50 text-[var(--color-muted)] hover:border-white/25 hover:text-[var(--color-foreground)]"
-                  } ${disableAdd ? "cursor-not-allowed opacity-50" : "backdrop-blur-sm"}`}
+                  className={`group relative overflow-hidden rounded-[var(--radius-xl)] border px-4 py-5 text-left transition ${isActive
+                    ? "border-white/20 text-[var(--color-foreground)] shadow-[var(--shadow-soft)]"
+                    : "border-[var(--border-soft)]/50 text-[var(--color-muted)] hover:border-white/25 hover:text-[var(--color-foreground)]"
+                    } ${disableAdd ? "cursor-not-allowed opacity-50" : "backdrop-blur-sm"}`}
                   style={{
                     background: isActive
                       ? "linear-gradient(135deg, rgba(255,255,255,0.16), rgba(37, 99, 235, 0.16))"
@@ -1054,11 +964,10 @@ export function ComparisonExperience({ config, models }: ComparisonExperiencePro
                   role="tab"
                   layout="position"
                   aria-selected={isActive}
-                  className={`relative overflow-hidden rounded-full px-6 py-2 text-[13px] font-semibold uppercase tracking-[0.32em] transition-[color,transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-background)] ${
-                    isActive
-                      ? "text-[var(--color-background)]"
-                      : "text-[var(--color-muted)] hover:text-[var(--color-foreground)]"
-                  }`}
+                  className={`relative overflow-hidden rounded-full px-6 py-2 text-[13px] font-semibold uppercase tracking-[0.32em] transition-[color,transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-background)] ${isActive
+                    ? "text-[var(--color-background)]"
+                    : "text-[var(--color-muted)] hover:text-[var(--color-foreground)]"
+                    }`}
                   onClick={() => setActiveTab(tab.id)}
                   whileHover={reduceMotion ? undefined : { scale: 1.015, transition: { duration: designTokens.motion.duration.hover / 1000, ease: designTokens.motion.easing.standard } }}
                   whileTap={reduceMotion ? undefined : { scale: 0.985, transition: { duration: designTokens.motion.duration.micro / 1000, ease: designTokens.motion.easing.exit } }}

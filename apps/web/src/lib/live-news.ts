@@ -285,9 +285,9 @@ export async function buildLiveNewsPayload(): Promise<NewsPayload> {
           const summary = sanitizeSummary(item.contentSnippet ?? item.content?.toString() ?? "");
           const tags = Array.isArray(item.categories)
             ? item.categories
-                .map((tag) => (typeof tag === "string" ? tag : tag?.toString() ?? ""))
-                .filter(Boolean)
-                .slice(0, 6)
+              .map((tag) => (typeof tag === "string" ? tag : String(tag ?? "")))
+              .filter(Boolean)
+              .slice(0, 6)
             : [];
 
           const article: NewsArticle = {
@@ -360,14 +360,14 @@ export async function buildLiveNewsPayload(): Promise<NewsPayload> {
   const digest: WeeklyDigest | null =
     digestArticles.length > 0
       ? {
-          weekOf: new Date().toISOString().slice(0, 10),
-          headline: `Weekly Digest | ${digestArticles[0].title}`,
-          summary: digestArticles
-            .slice(0, 3)
-            .map((article) => article.title)
-            .join(" • "),
-          articleIds: digestArticles.map((article) => article.id),
-        }
+        weekOf: new Date().toISOString().slice(0, 10),
+        headline: `Weekly Digest | ${digestArticles[0].title}`,
+        summary: digestArticles
+          .slice(0, 3)
+          .map((article) => article.title)
+          .join(" • "),
+        articleIds: digestArticles.map((article) => article.id),
+      }
       : null;
 
   const payload: NewsPayload = {

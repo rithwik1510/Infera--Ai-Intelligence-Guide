@@ -1,4 +1,4 @@
-# Infera · AI Intelligence Almanac
+# Infera · AI Intelligence Guide
 
 [![lint-web](https://github.com/rithwik1510/Infera--Ai-Intelligence-Guide/actions/workflows/lint-web.yml/badge.svg)](https://github.com/rithwik1510/Infera--Ai-Intelligence-Guide/actions/workflows/lint-web.yml)
 [![test-api](https://github.com/rithwik1510/Infera--Ai-Intelligence-Guide/actions/workflows/test-api.yml/badge.svg)](https://github.com/rithwik1510/Infera--Ai-Intelligence-Guide/actions/workflows/test-api.yml)

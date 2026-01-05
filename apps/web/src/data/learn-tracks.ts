@@ -2,6 +2,92 @@
 
 export const learnTracks: LearnTrack[] = [
   {
+    id: "reasoning-native",
+    title: "Reasoning-Native Engineering",
+    level: "advanced",
+    timeEstimateHours: 8,
+    outcome: "Architect applications that leverage test-time compute, chain-of-thought verification, and self-correction loops.",
+    modules: [
+      {
+        title: "Thinking Chains & Test-Time Compute",
+        objective: "Master the paradigm shift from zero-shot prompting to verifiable reasoning chains.",
+        resources: [
+          {
+            title: "Scaling Test-Time Compute",
+            url: "https://arxiv.org/abs/2408.03314",
+            type: "article",
+            description: "Deep dive into the compute-optimal scaling laws for reasoning models."
+          },
+          {
+            title: "OpenAI O1/O2 System Card",
+            url: "https://openai.com/index/o1-system-card-safety/",
+            type: "docs"
+          },
+          {
+            title: "Chain of Thought Distillation",
+            url: "https://github.com/google-research/distilling-step-by-step",
+            type: "github"
+          }
+        ],
+        task: "Implement a 'silent thought' parser that extracts and validates the reasoning steps from an O2 response."
+      },
+      {
+        title: "Monte Carlo Tree Search (MCTS) Agents",
+        objective: "Build agents that explore multiple future paths before committing to an action.",
+        resources: [
+          {
+            title: "AlphaCode 2 Architecture",
+            url: "https://storage.googleapis.com/deepmind-media/AlphaCode2/AlphaCode2_Tech_Report.pdf",
+            type: "article"
+          },
+          {
+            title: "LangChain Graph reasoning",
+            url: "https://langchain-ai.github.io/langgraph/",
+            type: "docs"
+          },
+          {
+            title: "Tree of Thoughts Paper",
+            url: "https://arxiv.org/abs/2305.10601",
+            type: "article"
+          }
+        ],
+        task: "Construct a coding agent that generates 3 candidate solutions and uses unit tests to vote for the best one."
+      },
+      {
+        title: "Verification & Self-Correction",
+        objective: "Design loops where models critique their own outputs against ground truth or formal logic.",
+        resources: [
+          {
+            title: "Constitutional AI",
+            url: "https://www.anthropic.com/index/constitutional-ai-harmlessness-from-ai-feedback",
+            type: "article"
+          },
+          {
+            title: "Guardrails for Reasoning",
+            url: "https://github.com/guardrails-ai/guardrails",
+            type: "github"
+          },
+          {
+            title: "Lean 4 Theorem Proving",
+            url: "https://leanprover.github.io/",
+            type: "docs"
+          }
+        ],
+        task: "Build a math tutor that formally verifies its step-by-step logic using a Python sandbox."
+      }
+    ],
+    capstone: {
+      title: "Autonomous Developer",
+      brief: "Create a CLI tool that plans, codes, debugs, and verifies a small feature implementation using a reasoning loop.",
+      deliverable: "GitHub repository with the 'Agentic Loop' logic and demonstration video."
+    },
+    badge: {
+      name: "Cognitive Architect",
+      description: "Awarded for mastering reasoning-heavy architectures.",
+      icon: "brain"
+    }
+  },
+  {
     "id": "prompt-foundations",
     "title": "Prompt Engineering Foundations",
     "level": "beginner",

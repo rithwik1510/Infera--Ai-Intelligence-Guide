@@ -1,0 +1,284 @@
+📝 Codex Instruction Prompt — AI Helper Project
+
+Codename: AI Helper (final name TBD)
+Vision: Build a professional AI hub where users can:
+
+Read AI news + weekly digest.
+
+Compare LLMs with benchmarks + pricing.
+
+Learn AI skills via curated tracks.
+
+Browse a directory of models.
+
+The product must feel like a futuristic magazine + tool hub (professional but approachable), with smooth animations, editorial design, and automated ingestion for news.
+
+1. Overall Theme & Branding
+
+Design Style: Editorial Modern, clean, premium.
+
+Primary Accent: Electric Blue #2563EB
+
+Secondary Accent: Cyan #06B6D4
+
+Dark Mode (default):
+
+Background: #0F172A, Surfaces: #1E293B, Text: #E2E8F0
+
+Light Mode (toggle):
+
+Background: #F9FAFB, Surfaces: #FFFFFF, Text: #0F172A
+
+Fixed Chart Palette (Comparisons):
+
+Model A = Blue #2563EB
+
+Model B = Amber #F59E0B
+
+Model C = Violet #8B5CF6
+
+Model D = Green #10B981
+
+Typography: Inter / Geist — bold editorial headings, clean readable body.
+
+Motion Language: Framer Motion for staggered fades, crossfades, hover lift with glow.
+
+Component Shape: rounded-2xl, soft shadows, gradient covers for news sources.
+
+2. Tabs & Navigation
+
+Tabs (top navbar):
+
+News
+
+Comparisons
+
+Learn
+
+Models
+
+Simple, consistent, global search always visible.
+
+3. News Tab
+
+Layout: 2-column grid (desktop), 1-column (mobile).
+
+Digest: pinned card → “Weekly Digest – Top 10 Updates” with animated gradient blend.
+
+Cards:
+
+Cover = source-branded gradient.
+
+Meta = source badge + tags + date.
+
+Title = 2–3 lines, bold.
+
+Excerpt = dim text.
+
+Hover = parallax shift + glow.
+
+Source Gradients:
+
+OpenAI → Cyan → Mint
+
+Anthropic → Violet → Amber
+
+Google DeepMind → Blue → Gold
+
+xAI → Charcoal → Electric Blue
+
+Digest → blend of top 3
+
+Data Source: RSS ingestion first, expand with scrapers later.
+
+Ranking: recency decay + source weight + repo stars delta.
+
+Automation (solo friendly):
+
+Cron job runs every 30 min.
+
+Parse feeds → clean HTML → normalize → store in Postgres.
+
+Weekly digest = auto top 10.
+
+Codex maintains ingestion logic when sources change.
+
+4. Comparisons Tab
+
+Scope MVP: LLMs only (OpenAI, Anthropic, Google, Grok).
+
+Default Benchmarks: MMLU, GSM8K, HumanEval, HellaSwag.
+
+User Flow:
+
+Multi-select 2–4 models.
+
+Radar + grouped bar charts for 4 benchmarks.
+
+Specs Tab → context, pricing, release date.
+
+Pricing Tab → token pricing + usage slider.
+
+Summary Tab → auto TL;DR.
+
+Visuals:
+
+Charts animate on load.
+
+Colors fixed for clarity.
+
+Data Strategy:
+
+Hand-seeded JSON for MVP (official model cards + launch posts).
+
+Codex can later expand ingestion from PapersWithCode / HuggingFace.
+
+5. Learn Tab
+
+Tracks are curated, not automated.
+
+Structure:
+
+Title + Level + Time Estimate.
+
+Outcome statement.
+
+Modules (resources + mini tasks).
+
+Capstone project.
+
+Badge (simple client-side).
+
+Launch Tracks:
+
+RAG in a Weekend
+
+Agents 101 (Tools & Functions)
+
+Open-Source LLMs with Ollama
+
+Data Format: MDX/JSON files.
+
+Policy: 2–3 trusted links per module, must include one hands-on exercise.
+
+Maintenance (solo friendly):
+
+Review links quarterly, replace stale ones.
+
+Codex assists with schema consistency, link validation.
+
+6. Models Tab
+
+Directory of 10–12 LLMs (MVP).
+
+Fields: provider, release date, context window, pricing, license.
+
+Filters: by provider, open-source vs API, license.
+
+UI: simple editorial cards, consistent design.
+
+7. Data & Automation Strategy
+
+MVP:
+
+News = RSS ingestion.
+
+Comparisons = hand-seeded JSON.
+
+Learn = curated MDX.
+
+Growth:
+
+Add scrapers (GitHub, Arxiv, PapersWithCode).
+
+Expand model list (Meta, Mistral, Hugging Face).
+
+Advanced:
+
+API-based ingestion.
+
+Codex suggests updates, user approves.
+
+Community submissions with moderation.
+
+8. Roadmap
+
+Phase 1: MVP (4–6 weeks)
+
+News grid + digest
+
+Comparisons (interactive, 4 benchmarks)
+
+Learn (3 curated tracks)
+
+Models (basic directory)
+
+Phase 2: Growth
+
+More benchmarks (MT-Bench, BBH)
+
+More providers (Meta, Mistral)
+
+GitHub/Arxiv scrapers
+
+Playground tab (prompt tester, OpenAI + Ollama)
+
+Phase 3: Advanced
+
+AI-generated summaries + SDK diffs
+
+Live prompt tests in Comparisons
+
+Personalized feed (follow topics/models)
+
+Community tracks + badges
+
+9. Tech Stack
+
+Frontend: Next.js (App Router), Tailwind, shadcn/ui, Framer Motion, Recharts.
+
+Backend: FastAPI, Postgres (Supabase), Redis (for jobs).
+
+Search: Meilisearch.
+
+Data Ingestion: Python feedparser/scrapers.
+
+Deployment: Vercel (frontend), Render/Fly.io (backend).
+
+10. High-End Process Mindset (Important)
+
+Always plan like a company:
+
+Separate MVP from Growth + Advanced features.
+
+Track pain points → refine with Codex as a dev partner.
+
+Codex Role:
+
+Scaffold folders, APIs, schema.
+
+Maintain ingestion workers when feeds break.
+
+Extend benchmarks/models on request.
+
+Check for inconsistencies and suggest fixes.
+
+Solo Developer Efficiency:
+
+Automate ingestion (news).
+
+Curate high-trust content once (courses).
+
+Review quarterly.
+
+Use Codex as a second engineer for boilerplate + fixes.
+
+11. Output Quality Goals
+
+Professional like a high-end company product.
+
+Visually attractive (editorial layouts, animations, gradients).
+
+Trustworthy (curated Learn, verified sources).
+
+Scalable (JSON/MDX → scrapers → APIs).

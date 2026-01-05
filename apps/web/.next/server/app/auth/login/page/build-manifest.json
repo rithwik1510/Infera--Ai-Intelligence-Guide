@@ -2,19 +2,16 @@
   "devFiles": [],
   "ampDevFiles": [],
   "polyfillFiles": [
-    "static/chunks/fed25_next_dist_build_polyfills_polyfill-nomodule.js"
+    "static/chunks/a6dad97d9634a72d.js"
   ],
   "lowPriorityFiles": [],
   "rootMainFiles": [
-    "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_13cc77c3._.js",
-    "static/chunks/fed25_next_dist_compiled_react-dom_54ded20c._.js",
-    "static/chunks/fed25_next_dist_compiled_next-devtools_index_22da5dd1.js",
-    "static/chunks/fed25_next_dist_compiled_5a90c29e._.js",
-    "static/chunks/fed25_next_dist_client_e520b7f9._.js",
-    "static/chunks/fed25_next_dist_ecd278d0._.js",
-    "static/chunks/fed25_@swc_helpers_cjs_9a7f43a1._.js",
-    "static/chunks/AI HELPER_apps_web_a0ff3932._.js",
-    "static/chunks/turbopack-AI HELPER_apps_web_e2689165._.js"
+    "static/chunks/3b08ca6cda0bb47e.js",
+    "static/chunks/91adb7bdb9870c6a.js",
+    "static/chunks/8082ab48faca5ea1.js",
+    "static/chunks/30cb146bc1e6f45f.js",
+    "static/chunks/7810da4988c46acd.js",
+    "static/chunks/turbopack-0b184dc9eae8bb17.js"
   ],
   "pages": {},
   "ampFirstPages": []

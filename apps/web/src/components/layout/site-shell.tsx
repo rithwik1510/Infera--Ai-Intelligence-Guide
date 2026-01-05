@@ -114,21 +114,19 @@ function ShellFrame({ children }: SiteShellProps) {
   return (
     <div className="relative min-h-screen overflow-hidden bg-[var(--color-background)] text-[var(--color-foreground)]">
       <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="absolute -left-1/3 top-[-18%] h-[38rem] w-[38rem] rounded-full bg-[radial-gradient(circle_at_center,_var(--glow-primary),_transparent_72%)] blur-[150px]" />
-        <div className="absolute -right-1/4 top-[-6%] h-[34rem] w-[34rem] rounded-full bg-[radial-gradient(circle_at_center,_var(--glow-secondary),_transparent_70%)] blur-[140px]" />
-        <div className="absolute left-1/2 top-[48%] h-[28rem] w-[36rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_center,_var(--glow-tertiary),_transparent_70%)] blur-[160px]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--bg-gradient-base),_transparent_80%)]" />
+        {/* Dynamic background handled by globals.css mesh-flow and body gradients */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--bg-gradient-base),_transparent_90%)]" />
       </div>
 
       <div className="relative flex min-h-screen flex-col">
         <SiteHeader />
         <main className="flex-1">
-          <div className="mx-auto w-full max-w-[1200px] px-6 pb-24 pt-20 sm:px-10 md:px-14 lg:px-16 xl:px-20">
+          <div className="mx-auto w-full max-w-[1800px] px-6 pb-24 pt-20 sm:px-10 md:px-14 lg:px-16 xl:px-20">
             {children}
           </div>
         </main>
         <footer className="relative border-t border-[var(--border-soft)]/60 bg-[var(--color-background)]/80 py-16 text-sm text-[var(--color-muted)]">
-          <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-4 px-6 sm:flex-row sm:items-center sm:justify-between sm:px-10 md:px-14 lg:px-16 xl:px-20">
+          <div className="mx-auto flex w-full max-w-[1800px] flex-col gap-4 px-6 sm:flex-row sm:items-center sm:justify-between sm:px-10 md:px-14 lg:px-16 xl:px-20">
             <p className="font-medium uppercase tracking-[0.28em] text-[var(--color-muted)]/80">Infera Intelligence Almanac</p>
             <p className="max-w-xl text-left text-xs leading-relaxed text-[var(--color-muted)]/80 sm:text-right">
               Crafted to the Agents playbook - curated intelligence, benchmarks, and learning pipelines with automation-readable foundations.

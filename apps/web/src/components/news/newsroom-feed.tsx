@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { fetchNewsPayload } from "@/lib/api";
 import { designTokens } from "@/lib/design/tokens";
 import { formatFullDate, formatNumber, formatSignedNumber } from "@/lib/format";
+import { SpotlightCard } from "@/components/ui/spotlight-card";
 
 type NewsroomFeedProps = {
   initial: NewsPayload;
@@ -145,7 +146,7 @@ export function NewsroomFeed({ initial, refreshIntervalMs = DEFAULT_REFRESH_INTE
       </header>
 
       {digest ? (
-        <div className="grid gap-8 lg:grid-cols-[1.35fr_1fr]">
+        <div className="grid gap-8 lg:grid-cols-[1.35fr_1fr] 2xl:grid-cols-[1.5fr_1fr]">
           <article className="relative overflow-hidden rounded-[var(--radius-xxl)] border border-[var(--border-soft)]/60 bg-[var(--color-surface)]/50 px-12 py-10 shadow-[var(--shadow-soft)]">
             <div
               aria-hidden
@@ -210,7 +211,7 @@ export function NewsroomFeed({ initial, refreshIntervalMs = DEFAULT_REFRESH_INTE
       ) : null}
 
       <motion.div
-        className="grid gap-6 md:grid-cols-2"
+        className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4"
         variants={articleListVariants}
         initial="hidden"
         animate="visible"
@@ -218,58 +219,69 @@ export function NewsroomFeed({ initial, refreshIntervalMs = DEFAULT_REFRESH_INTE
         {articles.map((article) => {
           const source = sourceLookup.get(article.sourceId);
           return (
-            <motion.article
-              key={article.id}
-              className="group relative overflow-hidden rounded-[var(--radius-xxl)] border border-[var(--border-soft)]/55 bg-[var(--color-surface)]/40 p-6 shadow-[var(--shadow-soft)] outline-none transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-depth)] focus-visible:ring-2 focus-visible:ring-[var(--color-accent-secondary)]/60"
-              tabIndex={0}
-              data-hotkey-target="news-card"
-              variants={articleItemVariants}
-            >
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-80"
-                style={{ background: getGradient(article.sourceId) }}
-              />
-              <div className="relative flex h-full flex-col gap-6">
-                <div className="flex items-center justify-between text-[11px] font-semibold uppercase tracking-[0.32em] text-[var(--color-muted)]/80">
-                  <span>{source?.name ?? "Unknown Source"}</span>
-                  <span>{formatFullDate(new Date(article.publishedAt))}</span>
-                </div>
-                <h3 className="text-2xl font-semibold leading-snug text-[var(--color-foreground)]">{article.title}</h3>
-                <p className="text-sm leading-relaxed text-[var(--color-muted)]">{article.summary}</p>
-                <div className="flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.32em] text-[var(--color-muted)]/80">
-                  {article.tags.map((tag) => (
-                    <span key={tag} className="rounded-full border border-[var(--border-soft)]/60 bg-white/5 px-3 py-1 text-white/80">
-                      {tag}
+            <motion.div key={article.id} variants={articleItemVariants}>
+              <SpotlightCard
+                className="group flex h-full flex-col gap-6 p-6 transition-transform duration-300 hover:-translate-y-1"
+                tabIndex={0}
+                data-hotkey-target="news-card"
+              >
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-10"
+                  style={{ background: getGradient(article.sourceId) }}
+                />
+                <div className="relative flex h-full flex-col gap-5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-muted)]/60">
+                      {source?.name ?? "Unknown"}
                     </span>
-                  ))}
-                  <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-white/80">
-                    Score {article.score.toFixed(1)}
-                  </span>
-                </div>
-                <div className="mt-auto flex flex-col gap-3 text-sm text-[var(--color-muted)] sm:flex-row sm:items-center sm:justify-between">
-                  {article.githubRepo ? (
-                    <span className="flex flex-col sm:flex-row sm:items-center sm:gap-2">
-                      <span className="font-medium text-[var(--color-foreground)]/90">
-                        {article.githubRepo.fullName}
-                      </span>
-                      <span className="text-[var(--color-muted)]/75">
-                        {formatNumber(article.githubRepo.stars)} stars ({formatSignedNumber(article.githubRepo.deltaStars)})
-                      </span>
+                    <span className="text-[10px] uppercase tracking-widest text-[var(--color-muted)]/40">
+                      {formatFullDate(new Date(article.publishedAt))}
                     </span>
-                  ) : (
-                    <span className="text-[var(--color-muted)]/70">Official release only</span>
-                  )}
-                  <Link
-                    href={`/news/${article.slug}`}
-                    className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-foreground)] transition-colors duration-200 hover:text-white"
-                  >
-                    Deep dive
-                    <span aria-hidden className="text-lg">&gt;</span>
-                  </Link>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="font-display text-2xl leading-none font-semibold text-[var(--color-foreground)] group-hover:text-[var(--color-accent-primary)] transition-colors">
+                      {article.title}
+                    </h3>
+                    <p className="line-clamp-3 text-sm leading-relaxed text-[var(--color-muted)]">
+                      {article.summary}
+                    </p>
+                  </div>
+
+                  <div className="mt-auto flex flex-col gap-4 pt-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                      {article.tags.map((tag) => (
+                        <span key={tag} className="rounded-full border border-white/5 bg-white/5 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-[var(--color-muted)]">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="flex items-center justify-between border-t border-white/5 pt-4">
+                      {article.githubRepo ? (
+                        <span className="flex items-center gap-2 text-xs text-[var(--color-muted)]">
+                          <span className="font-mono text-[var(--color-foreground)]">{formatNumber(article.githubRepo.stars)}</span>
+                          <span className={`${article.githubRepo.deltaStars > 0 ? 'text-[var(--accent-green)]' : 'text-[var(--color-muted)]'}`}>
+                            {formatSignedNumber(article.githubRepo.deltaStars)}
+                          </span>
+                        </span>
+                      ) : (
+                        <span className="text-xs text-[var(--color-muted)]/50">Official</span>
+                      )}
+
+                      <Link
+                        href={`/news/${article.slug}`}
+                        className="group/link flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-[var(--color-foreground)]"
+                      >
+                        Read
+                        <span className="transition-transform group-hover/link:translate-x-1">→</span>
+                      </Link>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </motion.article>
+              </SpotlightCard>
+            </motion.div>
           );
         })}
       </motion.div>

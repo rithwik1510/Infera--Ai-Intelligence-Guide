@@ -98,7 +98,7 @@
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "C:\\Users\\posan\\OneDrive\\Desktop",
+    "outputFileTracingRoot": "C:\\Users\\posan\\OneDrive\\Desktop\\infera",
     "experimental": {
       "useSkewCookie": false,
       "cacheLife": {
@@ -287,11 +287,11 @@
     "bundlePagesRouterDependencies": false,
     "configFileName": "next.config.ts",
     "turbopack": {
-      "root": "C:\\Users\\posan\\OneDrive\\Desktop"
+      "root": "C:\\Users\\posan\\OneDrive\\Desktop\\infera"
     }
   },
-  "appDir": "C:\\Users\\posan\\OneDrive\\Desktop\\AI HELPER\\apps\\web",
-  "relativeAppDir": "AI HELPER\\apps\\web",
+  "appDir": "C:\\Users\\posan\\OneDrive\\Desktop\\infera\\apps\\web",
+  "relativeAppDir": "apps\\web",
   "files": [
     ".next\\routes-manifest.json",
     ".next\\server\\pages-manifest.json",
