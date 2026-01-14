@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
@@ -10,11 +10,23 @@ export function GlobalSearch() {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   return (
     <form
       role="search"
-      className="group relative flex w-full items-center gap-3 rounded-full border border-[var(--border-soft)]/60 bg-[var(--color-surface-glass)] px-6 py-2 backdrop-blur-xl"
+      className="group relative flex w-full items-center gap-3 rounded-full border border-[var(--border-soft)]/60 bg-[var(--color-surface-glass)] px-6 py-2 backdrop-blur-xl transition-colors focus-within:bg-[var(--color-surface)]"
       onSubmit={(event) => {
         event.preventDefault();
         if (query.trim().length > 0) {
@@ -34,17 +46,18 @@ export function GlobalSearch() {
         />
       </motion.span>
       <input
+        ref={inputRef}
         aria-label="Search across news, comparisons, learning tracks, and models"
         data-hotkey-target="global-search"
         className="flex-1 bg-transparent text-[15px] text-[var(--color-foreground)] placeholder:text-[var(--color-muted)] focus:outline-none"
-        placeholder="Search the AI landscape"
+        placeholder="Command or Search..."
         value={query}
         onBlur={() => setIsFocused(false)}
         onChange={(event) => setQuery(event.target.value)}
         onFocus={() => setIsFocused(true)}
       />
-      <kbd className="hidden rounded-md border border-[var(--border-soft)]/60 bg-white/5 px-2 py-1 text-[10px] uppercase tracking-[0.32em] text-[var(--color-foreground)]/70 sm:block">
-        Enter
+      <kbd className="hidden rounded-md border border-[var(--border-soft)]/60 bg-white/5 px-2 py-1 text-[10px] uppercase tracking-[0.1em] font-medium text-[var(--color-foreground)]/70 sm:block">
+        Ctrl K
       </kbd>
       <motion.div
         aria-hidden

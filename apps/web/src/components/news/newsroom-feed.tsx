@@ -9,6 +9,7 @@ import { fetchNewsPayload } from "@/lib/api";
 import { designTokens } from "@/lib/design/tokens";
 import { formatFullDate, formatNumber, formatSignedNumber } from "@/lib/format";
 import { SpotlightCard } from "@/components/ui/spotlight-card";
+import { BookmarkButton } from "@/components/news/bookmark-button";
 
 type NewsroomFeedProps = {
   initial: NewsPayload;
@@ -232,9 +233,23 @@ export function NewsroomFeed({ initial, refreshIntervalMs = DEFAULT_REFRESH_INTE
                 />
                 <div className="relative flex h-full flex-col gap-5">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-muted)]/60">
-                      {source?.name ?? "Unknown"}
-                    </span>
+                    <div className="flex items-center gap-3">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-muted)]/60">
+                        {source?.name ?? "Unknown"}
+                      </span>
+                      {/* Pulse Score Badge */}
+                      {article.score > 70 && (
+                        <div className="flex items-center gap-1 rounded-full bg-red-500/10 px-1.5 py-0.5 border border-red-500/20">
+                          <span className="relative flex h-1.5 w-1.5">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-red-500"></span>
+                          </span>
+                          <span className="text-[9px] font-bold text-red-400 leading-none">
+                            {Math.round(article.score)}
+                          </span>
+                        </div>
+                      )}
+                    </div>
                     <span className="text-[10px] uppercase tracking-widest text-[var(--color-muted)]/40">
                       {formatFullDate(new Date(article.publishedAt))}
                     </span>
@@ -270,13 +285,20 @@ export function NewsroomFeed({ initial, refreshIntervalMs = DEFAULT_REFRESH_INTE
                         <span className="text-xs text-[var(--color-muted)]/50">Official</span>
                       )}
 
-                      <Link
-                        href={`/news/${article.slug}`}
-                        className="group/link flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-[var(--color-foreground)]"
-                      >
-                        Read
-                        <span className="transition-transform group-hover/link:translate-x-1">→</span>
-                      </Link>
+                      <div className="flex items-center gap-2">
+                         <BookmarkButton 
+                           articleId={article.id} 
+                           articleSlug={article.slug} 
+                           articleTitle={article.title}
+                         />
+                        <Link
+                          href={`/news/${article.slug}`}
+                          className="group/link flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-[var(--color-foreground)]"
+                        >
+                          Read
+                          <span className="transition-transform group-hover/link:translate-x-1">→</span>
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>

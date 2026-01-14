@@ -285,7 +285,11 @@ class RSSIngestor:
         slug = _slugify(entry_id or title)
         published_at = _parse_datetime(raw)
         tags = list(dict.fromkeys(_extract_tags(raw)))[:6]
-        score = _extract_score(raw)
+        
+        # Enhanced "Pulse" Processing (Simulated AI)
+        ai_meta = self._simulate_ai_processing(title, summary, tags)
+        score = ai_meta["score"] + _extract_score(raw)
+        
         hero_image = _extract_hero_image(raw)
         github_repo = _extract_github(raw)
 
@@ -295,13 +299,62 @@ class RSSIngestor:
             title=title.strip(),
             link=link,
             published_at=published_at,
-            summary=summary.strip(),
-            tags=tags,
+            summary=ai_meta["summary"] or summary.strip(),
+            tags=list(set(tags + ai_meta["tags"])), # Merge AI tags
             score=score,
             hero_image=hero_image,
             github_repo=github_repo,
         )
 
+    def _simulate_ai_processing(self, title: str, summary: str, tags: list[str]) -> dict[str, Any]:
+        """
+        Simulate an LLM analysis pass. 
+        In production, this would call OpenAI/Anthropic to generate:
+        - A 'Pulse Score' (importance)
+        - A 1-sentence TL;DR
+        - Additional semantic tags
+        """
+        text = (title + " " + summary).lower()
+        
+        # 1. Pulse Score Calculation
+        base_score = 50.0
+        multipliers = {
+            "release": 15, "launch": 15, "announce": 10, # News
+            "benchmark": 20, "sota": 20, "state-of-the-art": 20, # Performance
+            "open source": 10, "open-source": 10, "weights": 10, # OSS
+            "gpt-5": 30, "claude": 10, "gemini": 10, "llama": 10, # Major Players
+            "reasoning": 15, "agent": 10, "multimodal": 10, # Trends
+        }
+        
+        for keyword, bonus in multipliers.items():
+            if keyword in text:
+                base_score += bonus
+                
+        # Cap score
+        pulse_score = min(max(base_score, 10.0), 99.0)
+
+        # 2. Complexity Analysis
+        complexity = "Intermediate"
+        tech_terms = ["transformer", "quantization", "lora", "attention", "gradient", "embedding"]
+        term_count = sum(1 for term in tech_terms if term in text)
+        if term_count > 2:
+            complexity = "Advanced"
+        elif term_count == 0:
+            complexity = "General"
+
+        # 3. Tag Enrichment
+        new_tags = []
+        if pulse_score > 80:
+            new_tags.append("🔥 Trending")
+        if complexity == "Advanced":
+            new_tags.append("🔬 Technical")
+        
+        return {
+            "score": pulse_score,
+            "complexity": complexity,
+            "tags": new_tags,
+            "summary": None # Keep original for now, LLM would generate this
+        }
 
 def _get_first(raw: Any, key: str, default: str | None = None) -> str:
     value = getattr(raw, key, None)

@@ -6,7 +6,8 @@
 # Build outputs
 /dist
 /out
-/.next/
+.next/
+*.next/
 
 # Logs
 logs
@@ -33,3 +34,10 @@ __pycache__/
 
 # VSCode
 .vscode/
+
+# AI tools
+.claude/
+.aider*
+.cursor/
+.codex/
+.gemini/
